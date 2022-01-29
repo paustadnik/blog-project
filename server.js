@@ -4,6 +4,7 @@ const methodOverride = require('method-override')
 
 const Post = require('./models/post')
 const postRouter = require('./routes/post')
+const commentRouter = require('./routes/comment')
 
 // connection to mongodb
 mongoose.connect('mongodb://localhost/blog')
@@ -19,12 +20,15 @@ app.use(methodOverride('_method'))
 
 // root route
 app.get('/', async (req, res) => {
-  const posts = await Post.find()
+  const posts = await Post.find().populate('comments')
   res.render('allPosts', { posts })
 })
 
 // post routes
 app.use('/posts', postRouter)
+
+// comment routes
+app.use('/comments', commentRouter)
 
 // listening to requests
 app.listen(3000)

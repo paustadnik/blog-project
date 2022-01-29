@@ -34,13 +34,21 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  comments: {
+    type: [mongoose.SchemaTypes.ObjectId],
+    default: [],
+    ref: 'Comment',
+  },
 })
 
 // before saving to the database
 postSchema.pre('validate', function (next) {
   if (this.markdown) {
+    // sanitize html and seve it in the post
     this.sanitizedHtml = dompurify.sanitize(marked.parse(this.markdown))
   }
+  // update the update date whenever we change something in the post
+  this.updatedAt = Date.now()
   next()
 })
 
