@@ -1,5 +1,6 @@
 const express = require('express')
 const Post = require('./../models/post')
+const user = require('./../models/user')
 
 // new router for the post feature
 const router = express.Router()
@@ -55,6 +56,7 @@ function savePostAndRedirect(template) {
     req.post.title = req.body.title
     req.post.description = req.body.description
     req.post.markdown = req.body.markdown
+    req.post.user = req.session.currentUser._id
     try {
       // try saving the post to mongodb
       await req.post.save()

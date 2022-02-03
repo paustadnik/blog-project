@@ -38,7 +38,9 @@ router.post('/login', async (req, res) => {
     if (user) {
         const isPwCorrect = await bcrypt.compare(req.body.password, user.password)
         if (isPwCorrect) {
-            res.redirect('/')
+            req.session.currentUser = user
+            console.log(req.session)
+            res.redirect('/users/profile')
 
         } else {
             res.redirect(('/users/login'))
@@ -48,6 +50,18 @@ router.post('/login', async (req, res) => {
         res.redirect(('/users/login'))
     }
     console.log(user)
+})
+
+//route for the user profile
+router.get('/profile', (req, res) => {
+    const user = req.session.currentUser
+    res.render('profile', { user })
+})
+
+// route for handling the logout
+router.get('/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect('/users/login')
 })
 
 module.exports = router
