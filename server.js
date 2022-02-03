@@ -6,6 +6,7 @@ var expressLayouts = require('express-ejs-layouts')
 const Post = require('./models/post')
 const postRouter = require('./routes/post')
 const commentRouter = require('./routes/comment')
+const userRouter = require('./routes/user')
 
 // connection to mongodb
 mongoose.connect('mongodb://localhost/blog')
@@ -34,6 +35,9 @@ app.use('/posts', postRouter)
 
 // comment routes
 app.use('/comments', commentRouter)
+
+// user routes
+app.use('/users', userRouter)
 
 // listening to requests
 app.listen(3000)
